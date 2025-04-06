@@ -97,6 +97,13 @@ public class ConnectFour{
         myFrame.revalidate();
         myFrame.repaint();
 
+        for(int l = 0; l < gameData[0].length; l++){ // checks for ties
+            if(gameData[0][l] == 0){
+                break;
+            } else if (l == gameData[0].length - 1){
+                winner = 3;
+            }
+        }
     }
 
     public void scaler() {
@@ -137,7 +144,7 @@ public class ConnectFour{
         int valueH = 1;
         int valueDR = 1;
         int valueDL = 1;
-        storeData = new int[5][8]; // 0 = vert, 1 = hori, 2 = DR, 3 = DL, 4 = winners
+        storeData = new int[5][14]; // 0 = vert, 1 = hori, 2 = DR, 3 = DL, 4 = winners
         int temp = 0;
 
         for(int i = 0; i < gameData.length; i++){ // best way i thought I could do it is check each element and how they "interact" with the target
@@ -190,21 +197,18 @@ public class ConnectFour{
             }
         }
 
-        if(valueV == 4|| valueH == 4 || valueDR == 4 || valueDL == 4){
+        if(valueV >= 4|| valueH >= 4 || valueDR >= 4 || valueDL >= 4){
             System.out.println("Player: " + playerTurn + " WON!");
             for(int[] data : storeData){
                 if (data[4] == 0 && data[5] == 0){ // shold never equal row 0 at the end
                     continue;
                 }     // now we have [a, b, c, d, e, f] where [a, b], [c, d], and [e, f]
                 int x = 0;
-                data[6] = row;
-                data[7] = column;
+                data[12] = row;
+                data[13] = column;
                 for(int store : data){
                     storeData[4][x] = store; // so we know in constructBoard where the winning must be
                     x += 1;
-                    if(x >= 8){
-                        break;
-                    }
                 }
 
             }

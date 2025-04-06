@@ -25,7 +25,7 @@ public class Frame extends JFrame implements KeyListener{
                     game.scaler();
                     game.constructBoard();
                 });
-                
+
                 resizeTimer.setRepeats(false);
                 resizeTimer.start();
             }
@@ -71,10 +71,12 @@ public class Frame extends JFrame implements KeyListener{
         } else {
             if (e.getKeyCode() == 10){ // enter restarts the game
                 game.gameData = new int[6][7];
-                game.playerTurn = game.winner;
+                if (game.winner != 3){
+                    game.playerTurn = game.winner;
+                }
                 if(game.winner == 1){
                     red += 1;
-                } else{
+                } else if (game.winner == 2){
                     yellow += 1;
                 }
                 game.winner = 0;
