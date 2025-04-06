@@ -1,23 +1,33 @@
+import java.awt.Dimension;
 import java.awt.event.*;
 import javax.swing.JFrame;
+import javax.swing.Timer;
 public class Frame extends JFrame implements KeyListener{
     private ConnectFour game;
     int red = 0;
     int yellow = 0;
-    
+    Timer resizeTimer;
+
     Frame(ConnectFour game){
         this.game = game;
 
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setVisible(true);
         this.setSize(800, 800);
+        this.setMinimumSize(new Dimension(800, 800));
         this.setTitle("Connect Four");
         addKeyListener(this);
-        addComponentListener(new ComponentAdapter() { // for the laggy dybamic scaling
+        addComponentListener(new ComponentAdapter() { 
             @Override
             public void componentResized(ComponentEvent e) {
-                game.scaler();
-                game.constructBoard();
+                if (resizeTimer != null) resizeTimer.stop();
+                resizeTimer = new Timer(100, ev -> {
+                    game.scaler();
+                    game.constructBoard();
+                });
+                
+                resizeTimer.setRepeats(false);
+                resizeTimer.start();
             }
         });
     }
