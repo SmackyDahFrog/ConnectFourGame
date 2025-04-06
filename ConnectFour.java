@@ -6,27 +6,35 @@ public class ConnectFour{
     private Frame myFrame;
     private JPanel oldGridPanel;
     public int playerTurn;
-    private int[][] gameData;
-    ImageIcon square = new ImageIcon("square.png");
-    ImageIcon redCircle = new ImageIcon("redCircle.png");
-    ImageIcon yellowCircle = new ImageIcon("yellowCircle.png");
+    int[][] gameData;
+    private int[][] storeData;
+    int winner;
+    private ImageIcon square = new ImageIcon("square.png");
+    private ImageIcon redCircle = new ImageIcon("redCircle.png");
+    private ImageIcon yellowCircle = new ImageIcon("yellowCircle.png");
 
-    ImageIcon selSquare = new ImageIcon("selSquare.png");
-    ImageIcon selRedCircle = new ImageIcon("selRedCircle.png");
-    ImageIcon selYellowCircle = new ImageIcon("selYellowCircle.png");
+    private ImageIcon selSquare = new ImageIcon("selSquare.png");
+    private ImageIcon selRedCircle = new ImageIcon("selRedCircle.png");
+    private ImageIcon selYellowCircle = new ImageIcon("selYellowCircle.png");
     
+    private ImageIcon winRedCircle = new ImageIcon("winRedCircle.png");
+    private ImageIcon winYellowCircle = new ImageIcon("winYellowCircle.png");
+
     ConnectFour(){
         this.columnSel = 3;
         this.myFrame = new Frame(this);
         this.oldGridPanel = null;
         this.playerTurn = 1; // 1 is P1, 2 is P2
         this.gameData = new int[6][7];
+        this.winner = 0;
         this.square = scaler(square);
         this.redCircle = scaler(redCircle);
         this.yellowCircle = scaler(yellowCircle);
         this.selSquare = scaler(selSquare);
         this.selRedCircle = scaler(selRedCircle);
         this.selYellowCircle = scaler(selYellowCircle);
+        this.winYellowCircle = scaler(winYellowCircle);
+        this.winRedCircle = scaler(winRedCircle);
     }
 
     public void constructBoard(){
@@ -38,6 +46,28 @@ public class ConnectFour{
 
         for(int i = 0; i < board.length; i++){
             for(int j = 0; j < board[0].length; j++){
+                if(winner != 0 && gameData[i][j] == winner){
+                    boolean flag = false;
+                    for(int k = 0; k < storeData[4].length; k += 2){
+                        if(storeData[4][k] == i && storeData[4][k + 1] == j){
+                            if(winner == 1){
+                                board[i][j] = new JLabel(winRedCircle);
+
+                            }
+                            else{
+                                board[i][j] = new JLabel(winYellowCircle);
+                            }
+
+                            gridPanel.add(board[i][j]);
+                            flag = true;
+                            break;
+                        }
+                    }
+                    if(flag){
+                        continue;
+                    }
+                }
+
                 if(gameData[i][j] == 1){
                     if(columnSel == j){
                         board[i][j] = new JLabel(selRedCircle);
@@ -71,6 +101,7 @@ public class ConnectFour{
         myFrame.add(gridPanel); 
         myFrame.revalidate();
         myFrame.repaint();
+
     }
 
     public static ImageIcon scaler(ImageIcon original) {
@@ -101,6 +132,7 @@ public class ConnectFour{
         int valueH = 1;
         int valueDR = 1;
         int valueDL = 1;
+        storeData = new int[5][8]; // 0 = vert, 1 = hori, 2 = DR, 3 = DL, 4 = winners
         int temp = 0;
 
         for(int i = 0; i < gameData.length; i++){ // best way i thought I could do it is check each element and how they "interact" with the target
@@ -112,6 +144,8 @@ public class ConnectFour{
                         if(gameData[k][column] != gameData[row][column]){
                             break;
                         } else if(k == Math.max(i, row) - 1){
+                            storeData[0][2 * valueV - 2] = i;
+                            storeData[0][2 * valueV - 1] = j;
                             valueV += 1;
                         }
                     } 
@@ -120,6 +154,8 @@ public class ConnectFour{
                         if(gameData[row][l] != gameData[row][column]){
                             break;
                         } else if(l == Math.max(j, column) - 1){ // this made me want to kms icl holy shit it has been 40m on this if statement i need sleep it's because I had fucking L instead of j in max holy shit i'm crahsing out
+                        storeData[1][2 * valueH - 2] = i;
+                        storeData[1][2 * valueH - 1] = j;
                             valueH += 1;
                         }
                     } 
@@ -129,6 +165,8 @@ public class ConnectFour{
                         if(gameData[maxI - temp][m] != gameData[row][column]){
                             break;
                         } else if(m == Math.max(j, column) - 1){ 
+                            storeData[2][2 * valueDR - 2] = i;
+                            storeData[2][2 * valueDR - 1] = j;
                             valueDR += 1;
                         }   temp += 1;
                     }
@@ -138,6 +176,8 @@ public class ConnectFour{
                         if(gameData[maxI + temp][m] != gameData[row][column]){
                             break;
                         } else if(m == Math.max(j, column) - 1){ 
+                            storeData[3][2 * valueDL - 2] = i;
+                            storeData[3][2 * valueDL - 1] = j;
                             valueDL += 1;
                         }   temp += 1;
                     }
@@ -147,11 +187,25 @@ public class ConnectFour{
 
         if(valueV == 4|| valueH == 4 || valueDR == 4 || valueDL == 4){
             System.out.println("Player: " + playerTurn + " WON!");
-            JLabel won = new JLabel();
-            won.setText("Player: " + playerTurn + " HAS ONE!!!"); // yes i spelt won like that and think it's funny to keep it atp
+            for(int[] data : storeData){
+                if (data[4] == 0 && data[5] == 0){ // shold never equal row 0 at the end
+                    continue;
+                }     // now we have [a, b, c, d, e, f] where [a, b], [c, d], and [e, f]
+                int x = 0;
+                data[6] = row;
+                data[7] = column;
+                for(int store : data){
+                    storeData[4][x] = store; // so we know in constructBoard where the winning must be
+                    x += 1;
+                    if(x >= 8){
+                        break;
+                    }
+                }
 
+            }
+        
+            winner = playerTurn;
         }
-
     }
 
     public static void main(String[] args){
