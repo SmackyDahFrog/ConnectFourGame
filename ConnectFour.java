@@ -9,16 +9,16 @@ public class ConnectFour{
     int[][] gameData;
     private int[][] storeData;
     int winner;
-    private ImageIcon square = new ImageIcon("square.png");
-    private ImageIcon redCircle = new ImageIcon("redCircle.png");
-    private ImageIcon yellowCircle = new ImageIcon("yellowCircle.png");
+    private ImageIcon square = new ImageIcon(getClass().getResource("/images/square.png"));
+    private ImageIcon redCircle = new ImageIcon(getClass().getResource("/images/redCircle.png"));
+    private ImageIcon yellowCircle = new ImageIcon(getClass().getResource("/images/yellowCircle.png"));
 
-    private ImageIcon selSquare = new ImageIcon("selSquare.png");
-    private ImageIcon selRedCircle = new ImageIcon("selRedCircle.png");
-    private ImageIcon selYellowCircle = new ImageIcon("selYellowCircle.png");
+    private ImageIcon selSquare = new ImageIcon(getClass().getResource("/images/selSquare.png"));
+    private ImageIcon selRedCircle = new ImageIcon(getClass().getResource("/images/selRedCircle.png"));
+    private ImageIcon selYellowCircle = new ImageIcon(getClass().getResource("/images/selYellowCircle.png"));
     
-    private ImageIcon winRedCircle = new ImageIcon("winRedCircle.png");
-    private ImageIcon winYellowCircle = new ImageIcon("winYellowCircle.png");
+    private ImageIcon winRedCircle = new ImageIcon(getClass().getResource("/images/winRedCircle.png"));
+    private ImageIcon winYellowCircle = new ImageIcon(getClass().getResource("/images/winYellowCircle.png"));
 
     private ImageIcon[] images = {square, redCircle, yellowCircle, selSquare, selRedCircle, selYellowCircle, winRedCircle, winYellowCircle};
 
