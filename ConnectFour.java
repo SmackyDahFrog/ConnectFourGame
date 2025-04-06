@@ -20,6 +20,8 @@ public class ConnectFour{
     private ImageIcon winRedCircle = new ImageIcon("winRedCircle.png");
     private ImageIcon winYellowCircle = new ImageIcon("winYellowCircle.png");
 
+    private ImageIcon[] images = {square, redCircle, yellowCircle, selSquare, selRedCircle, selYellowCircle, winRedCircle, winYellowCircle};
+
     ConnectFour(){
         this.columnSel = 3;
         this.myFrame = new Frame(this);
@@ -27,14 +29,7 @@ public class ConnectFour{
         this.playerTurn = 1; // 1 is P1, 2 is P2
         this.gameData = new int[6][7];
         this.winner = 0;
-        this.square = scaler(square);
-        this.redCircle = scaler(redCircle);
-        this.yellowCircle = scaler(yellowCircle);
-        this.selSquare = scaler(selSquare);
-        this.selRedCircle = scaler(selRedCircle);
-        this.selYellowCircle = scaler(selYellowCircle);
-        this.winYellowCircle = scaler(winYellowCircle);
-        this.winRedCircle = scaler(winRedCircle);
+        scaler();
     }
 
     public void constructBoard(){
@@ -104,12 +99,22 @@ public class ConnectFour{
 
     }
 
-    public static ImageIcon scaler(ImageIcon original) {
-        int cellSizeH = 114;
-        int cellSizeV = 133;
-        Image image = original.getImage();
-        Image scaled = image.getScaledInstance(cellSizeH, cellSizeV, java.awt.Image.SCALE_SMOOTH);
-        return new ImageIcon(scaled);
+    public void scaler() {
+        int cellSizeH = (myFrame.getWidth() / 7);
+        int cellSizeV = (myFrame.getHeight() / 6);
+        for(int i = 0; i < images.length; i++){
+            Image newImage = images[i].getImage();
+            Image scaled = newImage.getScaledInstance(cellSizeH, cellSizeV, java.awt.Image.SCALE_SMOOTH);
+            images[i] = new ImageIcon(scaled);
+        }
+        square = images[0];
+        redCircle = images[1];
+        yellowCircle = images[2];
+        selSquare = images[3];
+        selRedCircle = images[4];
+        selYellowCircle = images[5];
+        winRedCircle = images[6];
+        winYellowCircle = images[7];
     }
 
     public boolean currentTurn() { // logic checks for current turn of P1 or P2

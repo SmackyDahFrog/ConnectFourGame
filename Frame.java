@@ -12,8 +12,14 @@ public class Frame extends JFrame implements KeyListener{
         this.setVisible(true);
         this.setSize(800, 800);
         this.setTitle("Connect Four");
-        this.setResizable(false);
         addKeyListener(this);
+        addComponentListener(new ComponentAdapter() { // for the laggy dybamic scaling
+            @Override
+            public void componentResized(ComponentEvent e) {
+                game.scaler();
+                game.constructBoard();
+            }
+        });
     }
 
     
@@ -75,4 +81,6 @@ public class Frame extends JFrame implements KeyListener{
     @Override
     public void keyTyped(KeyEvent e) {
     }
+    
 }
+
